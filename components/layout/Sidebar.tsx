@@ -19,6 +19,7 @@ import { ChatroomList } from "@/components/dashboard/ChatroomList";
 import { CreateChatroomDialog } from "@/components/dashboard/CreateChatroomDialog";
 import { ModeToggle } from "./ThemeToggle";
 import { useAuthStore } from "@/stores";
+import Link from "next/link";
 
 export function Sidebar() {
   const { sidebarOpen, setSidebarOpen } = useUIStore();
@@ -38,19 +39,19 @@ export function Sidebar() {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed left-0 top-0 z-50 h-[100vh] w-80 transform border-r transition-transform duration-200 ease-in-out lg:static lg:z-0 lg:translate-x-0",
+          "fixed left-0 top-0 z-50 h-[100vh] dark:bg-black bg-white w-80 transform border-r transition-transform duration-200 ease-in-out lg:static lg:z-0 lg:translate-x-0",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         <div className="flex h-full flex-col">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b">
-            <div className="flex items-center gap-3">
+            <Link href={'/dashboard'} className="flex items-center gap-3">
               <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg">
                 <Bot className="w-4 h-4 text-white" />
               </div>
               <h2 className="text-lg font-semibold truncate">Gemini Chat</h2>
-            </div>
+            </Link>
 
             <div className="flex items-center gap-2 flex-shrink-0">
               <Button

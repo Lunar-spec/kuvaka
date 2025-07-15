@@ -3,14 +3,11 @@ import { persist } from 'zustand/middleware'
 import type { ChatState, Message, Chatroom } from '@/types/chat'
 
 const AI_RESPONSES = [
-    "That's an interesting question! Let me think about that...",
-    "I understand what you're asking. Here's my perspective...",
-    "Based on what you've shared, I'd suggest...",
-    "That's a great point! Here's what I think...",
-    "I can help you with that. Let me explain...",
-    "Thank you for sharing that. My thoughts are...",
-    "I see what you mean. From my understanding...",
-    "That's something I can definitely help with..."
+    "I appreciate your question! This is a complex subject with multiple perspectives that deserve careful consideration. The fundamental principles involve interconnected systems where changes in one area can have cascading effects throughout.\n\nFrom a historical standpoint, we can see patterns that provide valuable insights into future developments. Any approach should be both flexible and grounded in evidence-based reasoning, balancing theoretical understanding with practical application.",
+
+    "Thank you for bringing this up! This fascinating topic involves understanding how different variables interact within a larger framework. The interaction isn't simply linear – it's more like a web of connections where each element influences others.\n\nWhat's particularly interesting is how this relates to broader trends across various domains. I'd recommend starting with a solid foundation in the basics before moving to more advanced concepts, building understanding progressively.",
+
+    "That's an excellent question that sits at the intersection of several important domains! When we examine this from multiple angles, we see patterns and connections that demonstrate the importance of systems thinking. Rather than viewing elements in isolation, we need to understand how they function as an interconnected whole.\n\nThis perspective reveals emergent properties that arise from component interactions. Effective solutions often require a holistic approach addressing multiple aspects simultaneously, coordinating efforts to avoid creating problems in other areas."
 ]
 
 export const useChatStore = create<ChatState>()(
@@ -75,8 +72,8 @@ export const useChatStore = create<ChatState>()(
             simulateAIResponse: (chatroomId) => {
                 set({ isTyping: true })
 
-                // Simulate AI thinking time (1.5-3 seconds)
-                const thinkingTime = Math.random() * 1500 + 1500
+                // Simulate AI thinking time (2-4 seconds)
+                const thinkingTime = Math.random() * 2000 + 2000 + Math.random() * 2000;
 
                 setTimeout(() => {
                     const randomResponse = AI_RESPONSES[Math.floor(Math.random() * AI_RESPONSES.length)]
@@ -110,31 +107,26 @@ export const useChatStore = create<ChatState>()(
                 const messagesPerPage = 20
                 const existingMessagesCount = chatroom.messages.length
 
-                // Calculate how many dummy messages we need for this page
                 const startIndex = page * messagesPerPage
 
-                // If we're on the first page and have existing messages, 
-                // we need fewer dummy messages
                 let dummyMessagesNeeded = messagesPerPage
                 if (page === 0) {
                     dummyMessagesNeeded = Math.max(0, messagesPerPage - existingMessagesCount)
                 }
 
-                // Don't generate dummy messages if we don't need any
                 if (dummyMessagesNeeded === 0) {
                     return []
                 }
 
-                // Generate dummy historical messages with timestamps older than existing messages
                 const oldestExistingTimestamp = chatroom.messages.length > 0
                     ? Math.min(...chatroom.messages.map(m => new Date(m.timestamp).getTime()))
                     : Date.now()
 
                 const dummyMessages: Message[] = Array.from({ length: dummyMessagesNeeded }, (_, i) => ({
-                    id: `dummy-${page}-${i}-${Date.now()}`, // Add timestamp to ensure uniqueness
+                    id: `dummy-${page}-${i}-${Date.now()}`,
                     content: `This is a dummy message ${startIndex + i + 1}`,
                     sender: Math.random() > 0.5 ? 'user' : 'ai',
-                    timestamp: new Date(oldestExistingTimestamp - (startIndex + i + 1) * 60000) // 1 minute intervals going back
+                    timestamp: new Date(oldestExistingTimestamp - (startIndex + i + 1) * 60000)
                 }))
 
                 return dummyMessages

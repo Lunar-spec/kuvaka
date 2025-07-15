@@ -4,7 +4,9 @@ import { useChatStore } from "@/stores/useChatStore";
 import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput";
 import { TypingIndicator } from "./TypingIndicator";
-import { Bot, Sparkles } from "lucide-react";
+import { Bot, Menu, Sparkles } from "lucide-react";
+import { Button } from "../ui/button";
+import { useUIStore } from "@/stores";
 
 interface ChatInterfaceProps {
   chatroomId: string;
@@ -12,14 +14,15 @@ interface ChatInterfaceProps {
 
 export function ChatInterface({ chatroomId }: ChatInterfaceProps) {
   const { getActiveChatroom, isTyping } = useChatStore();
+  const { sidebarOpen, setSidebarOpen } = useUIStore();
 
   const chatroom = getActiveChatroom();
 
   if (!chatroom) {
     return (
-      <div className="flex h-[calc(100vh-4rem)] items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-900">
-        <div className="text-center p-8 rounded-2xl bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 shadow-xl">
-          <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full">
+      <div className="flex h-[100vh] items-center justify-center">
+        <div className="text-center p-8 rounded-2xl shadow-xl">
+          <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full">
             <Bot className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-xl font-semibold mb-2 text-slate-800 dark:text-slate-200">
@@ -34,17 +37,23 @@ export function ChatInterface({ chatroomId }: ChatInterfaceProps) {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] ">
+    <div className="flex flex-col h-[100vh]">
       {/* Header */}
       <div className="flex-shrink-0 px-6 py-4 border-b backdrop-blur-sm">
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="lg:hidden"
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+          <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full">
             <Bot className="w-5 h-5 text-white" />
           </div>
           <div className="flex-1">
-            <h1 className="font-semibold truncate">
-              {chatroom.title}
-            </h1>
+            <h1 className="font-semibold">{chatroom.title}</h1>
             <div className="flex items-center gap-2 text-sm">
               <Sparkles className="w-3 h-3" />
               <span>AI Assistant • {chatroom.messages.length} messages</span>

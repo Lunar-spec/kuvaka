@@ -69,7 +69,7 @@ export default function DashboardPage() {
               </p>
               {chatroom.lastMessage && (
                 <p className="text-xs text-muted-foreground truncate">
-                  {chatroom.lastMessage.content}
+                  {chatroom.lastMessage.content.substring(0, 50)}
                 </p>
               )}
             </div>

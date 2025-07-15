@@ -40,7 +40,7 @@ export function MessageInput({ chatroomId }: MessageInputProps) {
 
     try {
       sendMessage(chatroomId, messageContent, imageData);
-      showSuccess("Message sent", "Your message has been sent to Gemini");
+      // showSuccess("Message sent", "Your message has been sent to Gemini");
     } catch (error) {
       showError("Failed to send", "Please try again");
       console.error("Error sending message:", error);
@@ -144,7 +144,7 @@ export function MessageInput({ chatroomId }: MessageInputProps) {
             onChange={handleMessageChange}
             onKeyDown={handleKeyDown}
             placeholder={
-              isTyping ? "Gemini is typing..." : "Type your message..."
+              isTyping ? "Gemini is thinking..." : "Type your message..."
             }
             disabled={isTyping || uploading}
             className={cn(

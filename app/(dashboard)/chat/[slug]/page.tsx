@@ -10,8 +10,7 @@ import { ArrowLeft, MessageCircle } from "lucide-react";
 export default function ChatPage() {
   const params = useParams();
   const router = useRouter();
-  const { chatrooms, activeChatroom, setActiveChatroom, getActiveChatroom } =
-    useChatStore();
+  const { chatrooms, setActiveChatroom, getActiveChatroom } = useChatStore();
 
   const chatroomId = params.slug as string;
 
@@ -21,7 +20,10 @@ export default function ChatPage() {
       if (chatroom) {
         setActiveChatroom(chatroomId);
       } else {
-        router.push("/dashboard");
+        setTimeout(() => {
+          // Redirect to dashboard if chatroom not found after delay
+          router.push("/dashboard");
+        }, 3000);
       }
     }
   }, [chatroomId, chatrooms, setActiveChatroom, router]);
@@ -30,14 +32,21 @@ export default function ChatPage() {
 
   if (!currentChatroom) {
     return (
-      <div className="flex items-center justify-center">
-        <div className="text-center">
-          <MessageCircle className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-          <h2 className="text-lg font-semibold mb-2">Chatroom not found</h2>
-          <p className="text-muted-foreground mb-4">
+      <div className="flex items-center justify-center h-[100vh]">
+        <div className="text-center p-8 rounded-2xl shadow-xl">
+          <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-rose-500 to-red-400 mx-auto mb-4 rounded-full">
+            <MessageCircle className="w-8 h-8 text-white" />
+          </div>
+          <h2 className="text-xl font-semibold mb-2 text-slate-800 dark:text-slate-200">
+            Chatroom not found
+          </h2>
+          <p className="text-slate-600 dark:text-slate-400 mb-6 max-w-sm">
             The chatroom you're looking for doesn't exist or has been deleted.
           </p>
-          <Button onClick={() => router.push("/dashboard")}>
+          <Button
+            onClick={() => router.push("/dashboard")}
+            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0"
+          >
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Dashboard
           </Button>
@@ -47,29 +56,8 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex flex-col">
-      <div className="border-b bg-card px-4 py-3">
-        <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.push("/dashboard")}
-            className="lg:hidden"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <div className="flex-1">
-            <h1 className="font-semibold truncate">{currentChatroom.title}</h1>
-            <p className="text-sm text-muted-foreground">
-              {currentChatroom.messages.length} messages
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex-1 overflow-hidden">
-        <ChatInterface chatroomId={chatroomId} />
-      </div>
+    <div className="flex flex-col h-[100vh]">
+      <ChatInterface chatroomId={chatroomId} />
     </div>
   );
 }

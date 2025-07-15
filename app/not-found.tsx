@@ -1,7 +1,7 @@
 const NotFound = () => {
-    return (
-        <div>NotFound</div>
-    )
-}
+  return (
+    <div className="h-screen flex justify-center items-center">NotFound</div>
+  );
+};
 
-export default NotFound
+export default NotFound;

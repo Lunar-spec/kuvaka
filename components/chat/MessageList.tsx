@@ -5,13 +5,14 @@ import { useChatStore } from "@/stores/useChatStore";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { MessageItem } from "./MessageItem";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Loader2, ChevronDown, Bot, User } from "lucide-react";
+import { Loader2, ChevronDown, Bot } from "lucide-react";
 import {
   generateMessageKey,
   deduplicateMessages,
   sortMessagesByTimestamp,
 } from "@/utils/messageUtils";
 import type { Message } from "@/types/chat";
+import { Button } from "../ui/button";
 
 interface MessageListProps {
   chatroomId: string;
@@ -35,13 +36,15 @@ export function MessageList({ chatroomId }: MessageListProps) {
 
   // Load initial messages
   useEffect(() => {
-    if (chatroom && initialLoad) {
-      const uniqueMessages = deduplicateMessages(chatroom.messages);
-      const sortedMessages = sortMessagesByTimestamp(uniqueMessages);
-      setAllMessages(sortedMessages);
-      setInitialLoad(false);
-      setShouldAutoScroll(true);
-    }
+    setTimeout(() => {
+      if (chatroom && initialLoad) {
+        const uniqueMessages = deduplicateMessages(chatroom.messages);
+        const sortedMessages = sortMessagesByTimestamp(uniqueMessages);
+        setAllMessages(sortedMessages);
+        setInitialLoad(false);
+        setShouldAutoScroll(true);
+      }
+    }, 3000);
   }, [chatroom, initialLoad]);
 
   // Update messages when new ones arrive with deduplication
@@ -147,9 +150,11 @@ export function MessageList({ chatroomId }: MessageListProps) {
   if (initialLoad) {
     return (
       <div className="h-full overflow-y-auto p-6 space-y-6">
-        <MessageSkeleton />
-        <MessageSkeleton />
-        <MessageSkeleton />
+        <MessageSkeleton isFromUser={false} />
+        <MessageSkeleton isFromUser={true} />
+        <MessageSkeleton isFromUser={false} />
+        <MessageSkeleton isFromUser={true} />
+        <MessageSkeleton isFromUser={false} />
       </div>
     );
   }
@@ -207,20 +212,37 @@ export function MessageList({ chatroomId }: MessageListProps) {
       </div>
 
       {/* Scroll to bottom button */}
-      {showScrollButton && (
-        <button
-          onClick={scrollToBottom}
-          className="fixed bottom-24 right-6 z-10 flex items-center justify-center w-12 h-12 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 border border-blue-400/20"
-          aria-label="Scroll to bottom"
-        >
-          <ChevronDown className="h-5 w-5" />
-        </button>
-      )}
+      <Button
+        variant={"outline"}
+        size={"icon"}
+        onClick={scrollToBottom}
+        className="fixed bottom-24 cursor-pointer right-4 z-10 flex items-center justify-center w-12 h-12 rounded-full"
+        aria-label="Scroll to bottom"
+      >
+        <ChevronDown className="h-5 w-5" />
+      </Button>
     </div>
   );
 }
 
-function MessageSkeleton() {
+function MessageSkeleton({ isFromUser }: { isFromUser: boolean }) {
+  if (isFromUser) {
+    // Right-aligned skeleton for user messages
+    return (
+      <div className="flex gap-4 max-w-4xl mx-auto justify-end">
+        <div className="flex-1 space-y-3 flex flex-col items-end">
+          <Skeleton className="h-4 w-24" />
+          <div className="space-y-2 flex flex-col items-end">
+            <Skeleton className="h-4 w-full max-w-md" />
+            <Skeleton className="h-4 w-3/4 max-w-sm" />
+          </div>
+        </div>
+        <Skeleton className="h-10 w-10 rounded-full" />
+      </div>
+    );
+  }
+
+  // Left-aligned skeleton for assistant messages
   return (
     <div className="flex gap-4 max-w-4xl mx-auto">
       <Skeleton className="h-10 w-10 rounded-full" />
