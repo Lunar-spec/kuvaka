@@ -120,3 +120,49 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/30 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/50;
+}
+
+/* Chat specific styles */
+.chat-container {
+  height: calc(100vh - 4rem);
+}
+
+.messages-container {
+  height: calc(100% - 5rem);
+}
+
+.typing-indicator {
+  animation: typing 1.5s ease-in-out infinite;
+}
+
+/* Chat animations */
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-slide-in {
+  animation: messageSlideIn 0.2s ease-out;
+}
