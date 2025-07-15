@@ -4,7 +4,7 @@ A responsive conversational AI chat application built with Next.js 15, featuring
 
 ## 🌟 Live Demo
 
-**[Live Deployment](https://kuvaka-git-master-lunarspecs-projects.vercel.app/)**
+**[Live Deployment](https://kuvaka-orpin.vercel.app/login)**
 
 ## ✨ Features
 
